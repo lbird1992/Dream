@@ -38,18 +38,6 @@ Texture ResourceManage::GetTex( const char* filename) {
   return tex;
 }
 
-/*Texture ResourceManage::LoadNormalResource( const char* filename) {
-  Texture tex;
-  tex.LoadFile( filename);
-  return tex;
-}
-
-Texture ResourceManage::LoadWas( const char* filename) {
-  Texture tex;
-  tex.LoadWasFile( filename);
-  return tex;
-}*/
-
 void ResourceManage::DeleteTex( const char* filename) {
   std::map< std::string, Texture>::iterator it = resource_map_.find( filename);
   if( it == resource_map_.end()) // Don't have the file want to delete

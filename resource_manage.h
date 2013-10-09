@@ -61,9 +61,7 @@ class ResourceManage {
 public:
   void DeleteTex( const char* filename);
   Texture GetTex( const char* filename);
-  //Texture LoadNormalResource( const char* filename);
-  //Texture LoadWas( const char* filename);
-
+  
 private:
   std::map< std::string, Texture> resource_map_; 
 };
