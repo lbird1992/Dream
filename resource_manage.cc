@@ -252,5 +252,7 @@ uint32_t Texture::GetColor( int frame, int direction, Coordinate position) {
     return 0;
   }
   uint32_t* color_buffer = reinterpret_cast<uint32_t*>(hge->Texture_Lock( tex_[frame][direction]));
-  return color_buffer[static_cast<int>(position.GetY())*width+static_cast<int>(position.GetX())];
+  uint32_t color = color_buffer[static_cast<int>(position.GetY())*width+static_cast<int>(position.GetX())];
+  hge->Texture_Unlock( tex_[frame][direction]);
+  return color;
 }
