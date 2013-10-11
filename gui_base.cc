@@ -21,7 +21,7 @@ void GUI::Render( const Coordinate position) {
     return;
   //显示自身纹理
   Coordinate position_to_draw = position.Plus( coordinate_);
-  if( texture_.GetDirectionCount() == 0) {
+  if( texture_.GetDirectionCount() != 0) {
     texture_.Render( position_to_draw, 0, 0);
     rect_drawed_.top = static_cast<int>(position_to_draw.GetY());
     rect_drawed_.left = static_cast<int>(position_to_draw.GetX());
