@@ -179,12 +179,12 @@ void Texture::LoadWasFile( const char* filename) {
   fclose(fp);
 }
 
-void Texture::Render( Coordinate position, int frame, int direction) {
+void Texture::Render( const Coordinate position, const int frame, const int direction) {
   HGE* hge = hgeCreate( HGE_VERSION);
   if( frame >= frame_count_) {
     hge->System_Log( "%s doesn't have %d frames, the max is %d.", 
                    filename_.c_str(), frame, frame_count_);
-    return;    ]
+    return;
   }
   if( direction >= direction_count_) {
     hge->System_Log( "%s doesn't have %d directions, the max is %d", 
@@ -204,8 +204,10 @@ void Texture::Render( Coordinate position, int frame, int direction) {
   delete spr;
 }
 
-void Texture::RenderEx( Coordinate destination_position, Coordinate source_position,
-                      int width, int height, int frame, int direction) {
+void Texture::RenderEx( const Coordinate destination_position, 
+                      const Coordinate source_position, 
+                      const int width, const int height, 
+                      const int frame, const int direction) {
   HGE* hge = hgeCreate( HGE_VERSION);
   if( frame >= frame_count_) {
     hge->System_Log( "%s doesn't have %d frames, the max is %d.", 

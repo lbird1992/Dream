@@ -22,31 +22,41 @@ public:
 
   void LoadFile( const char* filename);//For files in normal format.
   void LoadWasFile( const char* filename);//For files in was format.
-  HTEXTURE GetTexture( int frame, int direction) {
+  HTEXTURE GetTexture( const int frame, const int direction) {
     if( frame_count_ <= frame)
       return 0;
     if( direction_count_ <= direction)
       return 0;
     return tex_[frame][direction];
   }
-  inline int16_t GetFrameCount() {
+  inline int16_t GetFrameCount() const{
     return frame_count_ + 1;
   }
-  inline int16_t GetDirectionCount() {
+  inline int16_t GetDirectionCount() const{
     return direction_count_ + 1;
   }
-  inline int16_t GetKeyPointX() {
+  inline int16_t GetKeyPointX() const {
     return key_point_x_;
   }
-  inline int16_t GetKeyPointY() {
+  inline int16_t GetKeyPointY() const {
     return key_point_y_;
+  }
+  inline int GetWidth( const int frame, const int direction) const {
+    HGE* hge = hgeCreate( HGE_VERSION);
+    return hge->Texture_GetWidth( tex_[frame][direction]);
+  }
+  inline int GetHeight( const int frame, const int direction) const {
+    HGE* hge = hgeCreate( HGE_VERSION);
+    return hge->Texture_GetHeight( tex_[frame][direction]);
   }
   void Release();
 
-  void Render( Coordinate position, int frame, int direction);
-  void RenderEx( Coordinate destination_position, Coordinate source_position, 
-               int width, int height, int frame, int direction);
-  uint32_t GetColor( int frame, int direction, Coordinate position);
+  void Render( const Coordinate position, const int frame, const int direction);
+  void RenderEx( const Coordinate destination_position, 
+               const Coordinate source_position, 
+               const int width, const int height, 
+               const int frame, const int direction);
+  uint32_t GetColor( const int frame, const int direction, const Coordinate position);
 
 private:
   std::string filename_;

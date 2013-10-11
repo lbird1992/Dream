@@ -21,17 +21,23 @@ public:
   Coordinate() : x_(0), y_(0) {}
   Coordinate(float x, float y) : x_(x), y_(y) {}
 
-  inline float GetX() {
+  inline float GetX() const {
     return x_;
   }
-  inline float GetY() {
+  inline float GetY() const {
     return y_;
   }
-  Coordinate Plus(Coordinate c) {
+  Coordinate Plus(const Coordinate c) const {
     return Coordinate( x_+c.GetX(), y_+c.GetY()); 
   }
-  Coordinate Minus(Coordinate c) {
+  Coordinate Minus(const Coordinate c) const {
     return Coordinate( x_-c.GetX(), y_-c.GetY());
+  }
+  Coordinate operator+ (const Coordinate c) const {
+    return Coordinate( x_+c.GetX(), y_+c.GetY()); 
+  }
+  Coordinate operator- (const Coordinate c) const {
+    return Coordinate( x_-c.GetX(), y_-c.GetY()); 
   }
 
 private:
