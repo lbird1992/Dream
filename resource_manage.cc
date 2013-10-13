@@ -231,7 +231,7 @@ void Texture::RenderEx( const Coordinate destination_position,
   delete spr;
 }
 
-uint32_t Texture::GetColor( int frame, int direction, Coordinate position) {
+uint32_t Texture::GetColor( int frame, int direction, Coordinate position) const {
   HGE* hge = hgeCreate( HGE_VERSION);
   if( frame >= frame_count_) {
     hge->System_Log( "%s doesn't have %d frames, the max is %d.", 

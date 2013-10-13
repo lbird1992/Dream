@@ -22,6 +22,10 @@ public:
   inline Coordinate GetCoordinate() const {
     return coordinate_;
   }
+  inline void SetCoordinate(const Coordinate coordinate) {
+    coordinate_ = coordinate;
+  }
+
 
   inline std::list<GUI*> GetSonGuiList() const {
     return son_gui_list_;
@@ -31,10 +35,16 @@ public:
     return rect_drawed_;
   }
 
+  inline Texture GetTexture() const {
+    return texture_;
+  }
+
+  inline bool IsDraw() {
+    return is_draw_;
+  }
   inline void SetOnDraw() {
     is_draw_ = true;
   }
-
   inline void SetOffDraw() {
     is_draw_ = false;
   }
@@ -46,26 +56,43 @@ public:
     father_gui_ = const_cast<GUI*>(father);
   }
 
+  uint32_t GetPixel( const Coordinate position) const;
+
   virtual void Render( const Coordinate position);
 
   virtual void EventMouseLeftDown() { 
-    father_gui_->EventMouseLeftDown();
+    if( father_gui_ != NULL)
+      father_gui_->EventMouseLeftDown();
   }
   virtual void EventMouseLeftHolding() {
-    father_gui_->EventMouseLeftHolding();
+    if( father_gui_ != NULL)  
+      father_gui_->EventMouseLeftHolding();
   }
   virtual void EventMouseLeftUp() {
-    father_gui_->EventMouseLeftUp();
+    if( father_gui_ != NULL)
+      father_gui_->EventMouseLeftUp();
   }
   virtual void EventMouseRightClick() {
-    father_gui_->EventMouseRightClick();
+    if( father_gui_ != NULL)
+      father_gui_->EventMouseRightClick();
+  }
+  virtual void EventMouseGet() {
+    if( father_gui_ != NULL)
+      father_gui_->EventMouseGet();
+  }
+  virtual void EventMouseLeave() {
+    if( father_gui_ != NULL)
+      father_gui_->EventMouseLeave();
   }
 
 protected:
   int id_;
   bool is_draw_;
   Coordinate coordinate_;
+  Coordinate position_drawed_;
   RECT rect_drawed_;
+  int frame_drawed_;
+  int direction_drawed_;
   Texture texture_;
   std::list<GUI*> son_gui_list_;
   GUI* father_gui_;
