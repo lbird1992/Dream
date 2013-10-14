@@ -200,7 +200,9 @@ void Texture::Render( const Coordinate position, const int frame, const int dire
   hgeSprite* spr = new hgeSprite( tex_[frame][direction], 0, 0,//the left-top of texture.
                                 static_cast<float>(width),
                                 static_cast<float>(height));
-  spr->Render( position.GetX(), position.GetY());
+  Coordinate position_to_draw = position + Coordinate( static_cast<float>( key_point_x_), 
+                                                 static_cast<float>( key_point_y_));
+  spr->Render( position_to_draw.GetX(), position_to_draw.GetY());
   delete spr;
 }
 
@@ -227,7 +229,9 @@ void Texture::RenderEx( const Coordinate destination_position,
                                 source_position.GetX(),
                                 source_position.GetY(),
                                 static_cast<float>(width), static_cast<float>(height));
-  spr->Render( destination_position.GetX(), destination_position.GetY());
+  Coordinate position_to_draw = destination_position + Coordinate( static_cast<float>( key_point_x_), 
+                                                            static_cast<float>(key_point_y_));
+  spr->Render( position_to_draw.GetX(), position_to_draw.GetY());
   delete spr;
 }
 
