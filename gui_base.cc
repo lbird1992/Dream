@@ -20,7 +20,7 @@ void GUI::Render( const Coordinate position) {
   if( is_draw_ == false)
     return;
   //显示自身纹理
-  Coordinate position_to_draw = position.Plus( coordinate_);
+  Coordinate position_to_draw = position + coordinate_;
   if( texture_.GetDirectionCount() != 0) {
     texture_.Render( position_to_draw, 0, 0);
     rect_drawed_.top = static_cast<int>(position_to_draw.GetY());
@@ -30,7 +30,7 @@ void GUI::Render( const Coordinate position) {
     frame_drawed_ = 0;
     direction_drawed_ = 0;
     position_drawed_ = Coordinate( static_cast<float>(rect_drawed_.left), 
-                                  static_cast<float>(rect_drawed_.top));
+                                  static_cast<float>(rect_drawed_.top) );
   }
   else {
     frame_drawed_ = -1;
@@ -50,5 +50,5 @@ void GUI::Render( const Coordinate position) {
 uint32_t GUI::GetPixel( const Coordinate position) const {
   if( texture_.GetDirectionCount() == 0)
     return 0;
-  return texture_.GetColor( frame_drawed_, direction_drawed_, position.Minus( position_drawed_));
+  return texture_.GetColor( frame_drawed_, direction_drawed_, position - position_drawed_);
 }

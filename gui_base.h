@@ -15,9 +15,9 @@ public:
   GUI( const char* filename, const Coordinate position,const GUI* father);
   virtual ~GUI();
 
-  inline int GetID() const {
-    return id_;
-  }
+  //inline int GetID() const {
+  //  return id_;
+  //}
 
   inline Coordinate GetCoordinate() const {
     return coordinate_;
@@ -85,8 +85,15 @@ public:
       father_gui_->EventMouseLeave();
   }
 
+  void AddSon( GUI* son) {
+    son_gui_list_.push_back( son);
+  }
+  void DeleteSon( GUI* son) {
+    son_gui_list_.remove( son);
+  }
+
 protected:
-  int id_;
+  //int id_;
   bool is_draw_;
   Coordinate coordinate_;
   Coordinate position_drawed_;

@@ -1,5 +1,7 @@
 ﻿#include "gui_manage.h"
 
+GUIManage* g_gui_manage;
+
 void GUIManage::Init() {
   root_gui_pointer_ = new GUI( NULL, Coordinate( 0, 0), NULL);
   mouse_position_ = mouse_position_previous_ = Coordinate( 0, 0);

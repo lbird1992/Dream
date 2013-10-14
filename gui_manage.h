@@ -20,6 +20,16 @@ public:
   }
 
   GUI* GetMouseOn();
+
+  inline GUI* GetRoot() {
+    return root_gui_pointer_;
+  }
+  inline Coordinate GetMousePosition() {
+    return mouse_position_;
+  }
+  inline Coordinate GetMousePositionPrevious() {
+    return mouse_position_previous_;
+  }
   
 
 private:
@@ -30,5 +40,7 @@ private:
   Coordinate mouse_position_;
   Coordinate mouse_position_previous_;
 };
+
+extern GUIManage* g_gui_manage;
 
 #endif
