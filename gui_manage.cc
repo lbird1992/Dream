@@ -32,41 +32,71 @@ void GUIManage::Control() {
   if( hge->Input_KeyUp( HGEK_RBUTTON) ) {
     mouse_on_->EventMouseRightClick();
   }
+  KillAnimation();
 }
 
-GUI* GUIManage::GetMouseOn() {
+GUI* GUIManage::GetMouseOn() const {
   for( std::list<GUI*>::reverse_iterator reverse_iter = root_gui_pointer_->GetSonGuiList().rbegin();
-      reverse_iter != root_gui_pointer_->GetSonGuiList().rend(); ++reverse_iter) {  
-        //使用反向迭代器，使第一个结果就是最终的结果
-    if( (*reverse_iter)->IsDraw() == false)
+      reverse_iter != root_gui_pointer_->GetSonGuiList().rend(); ++reverse_iter) {
+    //使用反向迭代器，使第一个结果就是最终的结果
+    if( (*reverse_iter)->IsDraw() == false) 
       continue;
     if( (*reverse_iter)->GetTexture().GetDirectionCount() == 0) {
-      for( std::list<GUI*>::iterator iter = (*reverse_iter)->GetSonGuiList().begin(); 
-          iter != (*reverse_iter)->GetSonGuiList().end(); ++iter) {
-        RECT rect = (*iter)->GetRectDrawed();
-        if( rect.left <= mouse_position_.GetX() && rect.right >= mouse_position_.GetX() &&
-            rect.top <= mouse_position_.GetY() && rect.bottom >= mouse_position_.GetY() ) {
-          if( ((*iter)->GetPixel( mouse_position_) & 0xFF000000) != 0)
-            return (*iter);
-        }
-      }
+      GUI* gui = this->GetMouseOnInNoTextureDialog( (*reverse_iter));
+      if( gui == NULL)
+        continue;
+      else
+        return gui;
     }
-    else{
+    else {
       RECT rect = (*reverse_iter)->GetRectDrawed();
-      if( rect.left <= mouse_position_.GetX() && rect.right >= mouse_position_.GetX() &&
-          rect.top <= mouse_position_.GetY() && rect.bottom >= mouse_position_.GetY() ) {
-        for( std::list<GUI*>::iterator iter = (*reverse_iter)->GetSonGuiList().begin(); 
-             iter != (*reverse_iter)->GetSonGuiList().end(); ++iter) {
-          RECT rect_son = (*iter)->GetRectDrawed();
-          if( rect_son.left <= mouse_position_.GetX() && rect_son.right >= mouse_position_.GetX() &&
-             rect_son.top <= mouse_position_.GetY() && rect_son.bottom >= mouse_position_.GetY() ) {
-            if( ((*iter)->GetPixel( mouse_position_) & 0xFF000000) != 0)
-              return (*iter);
-          }
-        }
-        return (*reverse_iter);
+      if( rect.top <= mouse_position_.GetY() && rect.bottom >= mouse_position_.GetY() &&
+          rect.left <= mouse_position_.GetX() && rect.right >= mouse_position_.GetY() ) {
+         return this->GetMouseOnInDialogWithTexture( (*reverse_iter));
       }
     }
   }
   return NULL;
 }
+
+GUI* GUIManage::GetMouseOnInNoTextureDialog( const GUI* gui) const {
+  for( std::list<GUI*>::iterator iter = gui->GetSonGuiList().begin();
+      iter != gui->GetSonGuiList().end(); ++iter) {
+    if( (*iter)->IsDraw() == false)
+      continue;
+    RECT rect = (*iter)->GetRectDrawed();
+    if( rect.top <= mouse_position_.GetY() && rect.bottom >= mouse_position_.GetY() &&
+        rect.left <= mouse_position_.GetX() && rect.right >= mouse_position_.GetY() ) {
+      if( ((*iter)->GetPixel( mouse_position_) & 0xFF000000) != 0)
+        return (*iter);
+    }
+  }
+  return NULL;
+}
+
+GUI* GUIManage::GetMouseOnInDialogWithTexture( const GUI* gui) const {
+  for( std::list<GUI*>::iterator iter = gui->GetSonGuiList().begin();
+      iter != gui->GetSonGuiList().end(); ++iter) {
+    RECT rect = (*iter)->GetRectDrawed();
+    if( rect.top <= mouse_position_.GetY() && rect.bottom >= mouse_position_.GetY() &&
+        rect.left <= mouse_position_.GetX() && rect.right >= mouse_position_.GetY() ) {
+      if( ((*iter)->GetPixel( mouse_position_) & 0xFF000000) != 0)
+        return (*iter);
+    }
+  }
+  return const_cast<GUI*>(gui);
+}
+
+void GUIManage::AddAnimation( GUIAnimation* animation) {
+  animations_.push_back( animation);
+}
+
+void GUIManage::KillAnimation() {
+  for( std::list<GUIAnimation*>::iterator iter = animations_.begin(); iter != animations_.end(); ) {
+    if( (*iter)->IsEnd() ) {
+      (*iter)->GetFatherGUI()->DeleteSon( (*iter));
+      delete (*iter++);
+    }
+  }
+}
+

@@ -2,6 +2,7 @@
 
 GUI::GUI( const char* filename, const Coordinate position,const GUI* father) {
   //TODO: 加入ID项的初始化
+  type_ = GUI_BASE;
   coordinate_ = position;
   father_gui_ = const_cast<GUI*>(father);
   if( filename != NULL)
