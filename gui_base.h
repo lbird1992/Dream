@@ -10,14 +10,6 @@
 #include "hge_include.h"
 #include "resource_manage.h"
 
-enum GuiType {
-  NONE = 1,
-  GUI_BASE,
-  GUI_BUTTON,
-  GUI_DIALOG,
-  GUI_ANIMATION
-};
-
 class GUI {
 public:
   GUI( const char* filename, const Coordinate position,const GUI* father);
@@ -100,13 +92,8 @@ public:
     son_gui_list_.remove( son);
   }
 
-  inline GuiType GetType() {
-    return type_;
-  }
-
 protected:
   //int id_;
-  GuiType type_;
   bool is_draw_;
   Coordinate coordinate_;
   Coordinate position_drawed_;

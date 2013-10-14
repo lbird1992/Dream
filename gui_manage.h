@@ -2,7 +2,6 @@
 #define _DREAM_GUIMANAGE_
 
 #include "gui_base.h"
-#include "gui_animation.h"
 
 class GUIManage {
 public:
@@ -20,12 +19,7 @@ public:
     mouse_position_ = Coordinate( mouse_position_x, mouse_position_y);
   }
 
-  void AddAnimation( GUIAnimation* animation);
-  void KillAnimation();
-
-  GUI* GetMouseOn() const;
-  GUI* GetMouseOnInNoTextureDialog( const GUI* dialog) const;
-  GUI* GetMouseOnInDialogWithTexture( const GUI* dialog) const;
+  GUI* GetMouseOn();
 
   inline GUI* GetRoot() {
     return root_gui_pointer_;
@@ -39,7 +33,7 @@ public:
   
 
 private:
-  std::list<GUIAnimation*> animations_;
+  std::map<int, GUI*> gui_map_;
   GUI* root_gui_pointer_;
   GUI* mouse_on_;
   GUI* mouse_on_previous_;
