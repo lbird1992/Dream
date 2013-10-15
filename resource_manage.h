@@ -56,7 +56,7 @@ public:
                const Coordinate source_position, 
                const int width, const int height, 
                const int frame, const int direction);
-  uint32_t GetColor( const int frame, const int direction, const Coordinate position);
+  uint32_t GetColor( const int frame, const int direction, const Coordinate position) const;
 
 private:
   std::string filename_;

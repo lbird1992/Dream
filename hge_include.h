@@ -27,10 +27,10 @@ public:
   inline float GetY() const {
     return y_;
   }
-  Coordinate Plus(const Coordinate c) const {
+  Coordinate Plus(const Coordinate c) {
     return Coordinate( x_+c.GetX(), y_+c.GetY()); 
   }
-  Coordinate Minus(const Coordinate c) const {
+  Coordinate Minus(const Coordinate c) {
     return Coordinate( x_-c.GetX(), y_-c.GetY());
   }
   Coordinate operator+ (const Coordinate c) const {
