@@ -28,10 +28,14 @@ public:
     return y_;
   }
   Coordinate Plus(const Coordinate c) {
-    return Coordinate( x_+c.GetX(), y_+c.GetY()); 
+    x_ += c.GetX();
+    y_ += c.GetY();
+    return *this; 
   }
   Coordinate Minus(const Coordinate c) {
-    return Coordinate( x_-c.GetX(), y_-c.GetY());
+    x_ -= c.GetX();
+    y_ -= c.GetY();
+    return *this; 
   }
   Coordinate operator+ (const Coordinate c) const {
     return Coordinate( x_+c.GetX(), y_+c.GetY()); 

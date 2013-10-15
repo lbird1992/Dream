@@ -5,6 +5,7 @@ GUIAnimation::GUIAnimation( const char* filename, const Coordinate position, con
   animation_type_ = animation_type;
   is_end_ = false;
   frame_ = frame_fill_ = 0;
+  direction_ = 0;
   is_draw_ = true;
   type_ = GUI_ANIMATION;
 }
@@ -24,8 +25,7 @@ void GUIAnimation::Render( const Coordinate position) {
   rect_drawed_.right = static_cast<int>(position_to_draw.GetX() + texture_.GetWidth( 0, 0));
   frame_drawed_ = 0;
   direction_drawed_ = 0;
-  position_drawed_ = Coordinate( static_cast<float>(rect_drawed_.left), 
-                                static_cast<float>(rect_drawed_.top) );
+  position_drawed_ = position_to_draw;
 
   ++frame_fill_;
   if( frame_fill_ >= kFrameFill) {

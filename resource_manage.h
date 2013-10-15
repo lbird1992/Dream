@@ -30,10 +30,10 @@ public:
     return tex_[frame][direction];
   }
   inline int16_t GetFrameCount() const{
-    return frame_count_ + 1;
+    return frame_count_;
   }
   inline int16_t GetDirectionCount() const{
-    return direction_count_ + 1;
+    return direction_count_;
   }
   inline int16_t GetKeyPointX() const {
     return key_point_x_;

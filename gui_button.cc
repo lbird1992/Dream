@@ -11,6 +11,8 @@ GUIButton::GUIButton( const char* filename,const Coordinate position,const GUI* 
     mouse_click_frame_ = mouse_click_frame;
     state_ = BS_Normal;
     click_func_ = plick_func;
+    type_ = GUI_BUTTON;
+    is_draw_ = true;
 }
 
 void GUIButton::Render( const Coordinate position)
@@ -23,6 +25,13 @@ void GUIButton::Render( const Coordinate position)
   if(texture_.GetDirectionCount() == 0)
     return;
   texture_.Render( position + coordinate_, frame, 0);
+  rect_drawed_.top = static_cast<int>((position + coordinate_).GetY());
+  rect_drawed_.bottom = static_cast<int>( (position + coordinate_).GetY() + texture_.GetHeight( frame, 0));
+  rect_drawed_.left = static_cast<int>((position + coordinate_).GetX());
+  rect_drawed_.right = static_cast<int>( (position + coordinate_).GetX() + texture_.GetWidth( frame, 0));
+  frame_drawed_ = frame;
+  direction_drawed_ = 0;
+  position_drawed_ = position + coordinate_;
   //ResourceManage::GetWas(m_filename.c_str())->DrawWas( x+m_x, y+m_y, 0, m_id, frame); 
 }
 
