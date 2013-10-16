@@ -8,6 +8,15 @@ void GUIManage::Init() {
   mouse_on_ = mouse_on_previous_ = NULL;
 }
 
+void GUIManage::Reset() {
+  if( root_gui_pointer_ != NULL) {
+    delete root_gui_pointer_;
+  }
+  root_gui_pointer_ = new GUI( NULL, Coordinate( 0, 0), NULL);
+  mouse_position_previous_ = Coordinate(0,0);
+  mouse_on_ = mouse_on_previous_ = NULL;
+}
+
 void GUIManage::Render() const {
   root_gui_pointer_->Render( Coordinate( 0, 0));
 }

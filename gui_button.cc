@@ -40,7 +40,7 @@ void GUIButton::EventMouseLeftDown(){
 }
 
 void GUIButton::EventMouseLeftUp(){
-	state_ = BS_Normal;
+	state_ = BS_MouseOn;
 	(click_func_)();
 }
 

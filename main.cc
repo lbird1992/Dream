@@ -6,16 +6,13 @@
 #include "hge_include.h"
 #include "resource_manage.h"
 #include "gui_manage.h"
-#include "gui_dialog.h"
-#include "gui_animation.h"
-#include "gui_button.h"
-
-int frame = 0, direction = 0;
-int mouse_frame = 0, mouse_direction = 0;
+#include "game_manage.h"
 
 bool FrameFunc()
 {
   g_gui_manage->Control();
+  if( g_game_manage->GetGameState() == GS_END)
+    return true;
 	return false;
 }
 
@@ -26,15 +23,12 @@ bool RenderFunc()
 	pHge->Gfx_Clear( 0xFFFFFFFF);
   
   g_gui_manage->Render();
-  Texture tex = g_resource_manage->GetTex( "cursor.was");
+  Texture tex = g_resource_manage->GetTex( "image\\other\\cursor.was");
   tex.Render( g_gui_manage->GetMousePosition(), 0, 0);
   
+
 	pHge->Gfx_EndScene();
 	return false;
-}
-
-void ClickOnButton() {
-  MessageBox( NULL, "µã»÷ÁË°´Å¥", NULL, MB_OK);
 }
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -58,20 +52,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
   g_resource_manage = new ResourceManage();
   g_gui_manage = new GUIManage();
   g_gui_manage->Init();
-
-  
+  g_game_manage = new GameManage(); 
+  g_gui_manage->GetRoot()->SetOnDraw();
 
 	if( pHge->System_Initiate())
 	{
-    GUIDialog* dialog = new GUIDialog( "state_human.was", Coordinate( 50, 50));
-    GUIButton* button = new GUIButton( "btnNext.was", Coordinate( 30, 30), dialog, ClickOnButton);
-    dialog->AddSon( button);
-    GUIAnimation* animation = new GUIAnimation( "1.was", Coordinate( 50, 40), dialog, LOOP);
-    dialog->AddSon( animation);
-    g_gui_manage->AddAnimation( animation);
-    g_gui_manage->GetRoot()->AddSon( dialog);
-    g_gui_manage->GetRoot()->SetOnDraw();
-    dialog->SetOnDraw();
+    g_game_manage->SetBegin();
 		pHge->System_Start();
 	}
 	pHge->Release();
