@@ -1,10 +1,13 @@
 #include "gui_animation.h"
 
+float GUIAnimation::speed_ = 2;
+
 GUIAnimation::GUIAnimation( const char* filename, const Coordinate position, const GUI* father,
                             const AnimationType animation_type) : GUI(filename, position, father) {
   animation_type_ = animation_type;
   is_end_ = false;
-  frame_ = frame_fill_ = 0;
+  frame_ = 0;
+  frame_fill_ = 0;
   direction_ = 0;
   is_draw_ = true;
   type_ = GUI_ANIMATION;
@@ -27,8 +30,6 @@ void GUIAnimation::Render( const Coordinate position) {
   direction_drawed_ = 0;
   position_drawed_ = position_to_draw;
   frame_fill_ += speed_;
-
-  //++frame_fill_;
   if( frame_fill_ >= kFrameFill) {
     frame_fill_ -= kFrameFill;
     ++frame_;

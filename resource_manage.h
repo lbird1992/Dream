@@ -35,12 +35,8 @@ public:
   inline int16_t GetDirectionCount() const{
     return direction_count_;
   }
-  inline int16_t GetKeyPointX() const {
-    return key_point_x_;
-  }
-  inline int16_t GetKeyPointY() const {
-    return key_point_y_;
-  }
+  inline int GetKeyPointX( const int frame, const int direction) const;
+  inline int GetKeyPointY( const int frame, const int direction) const;
   inline int GetWidth( const int frame, const int direction) const {
     HGE* hge = hgeCreate( HGE_VERSION);
     return hge->Texture_GetWidth( tex_[frame][direction]);
@@ -63,8 +59,8 @@ private:
   HTEXTURE tex_[kMaxFrame][8];
   int16_t frame_count_;
   int16_t direction_count_;
-  int16_t key_point_x_;
-  int16_t key_point_y_;
+  int key_point_x_[kMaxFrame][8];
+  int key_point_y_[kMaxFrame][8];
 };
 
 class ResourceManage {
@@ -82,7 +78,7 @@ private:
 struct WPixel {  
     union {  
 		uint16_t color;
-        struct {								// 16bit 565ģʽ
+        struct {								// 16bit 565ģ
             uint16_t blue:5;                        
             uint16_t green:6;                       
             uint16_t red:5;                         

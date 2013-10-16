@@ -7,6 +7,7 @@
 #include "resource_manage.h"
 #include "gui_manage.h"
 #include "game_manage.h"
+#include "gui_mouse.h"
 
 bool FrameFunc()
 {
@@ -23,9 +24,7 @@ bool RenderFunc()
 	pHge->Gfx_Clear( 0xFFFFFFFF);
   
   g_gui_manage->Render();
-  Texture tex = g_resource_manage->GetTex( "image\\other\\cursor.was");
-  tex.Render( g_gui_manage->GetMousePosition(), 0, 0);
-  
+  g_gui_mouse->Render();
 
 	pHge->Gfx_EndScene();
 	return false;
@@ -57,6 +56,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	if( pHge->System_Initiate())
 	{
+    g_gui_mouse = new GUIMouse();
     g_game_manage->SetBegin();
 		pHge->System_Start();
 	}

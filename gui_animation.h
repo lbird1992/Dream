@@ -39,7 +39,7 @@ public:
     return is_end_;
   }
 
-  static float GetSpeed() const {
+  static float GetSpeed() {
     return speed_;
   }
 
