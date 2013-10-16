@@ -8,7 +8,7 @@ enum AnimationType {
   LOOP = 2//循环播放
 };
 
-const int kFrameFill = 4;
+const int kFrameFill = 8;
 
 class GUIAnimation : public GUI {
 public:
@@ -39,12 +39,22 @@ public:
     return is_end_;
   }
 
+  static float GetSpeed() const {
+    return speed_;
+  }
+
+  static void SetSpeed(const float speed){
+     speed_ = speed;
+  }
+
 protected:
   AnimationType animation_type_;
   bool is_end_;//此值只对type==LOOP 情况有效
   int frame_;
-  int frame_fill_;
+  float frame_fill_;
   int direction_;
+
+  static float speed_;
 };
 
 #endif

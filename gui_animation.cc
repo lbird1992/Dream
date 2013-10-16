@@ -26,17 +26,17 @@ void GUIAnimation::Render( const Coordinate position) {
   frame_drawed_ = 0;
   direction_drawed_ = 0;
   position_drawed_ = position_to_draw;
+  frame_fill_ += speed_;
 
-  ++frame_fill_;
+  //++frame_fill_;
   if( frame_fill_ >= kFrameFill) {
-    frame_fill_ = 0;
+    frame_fill_ -= kFrameFill;
     ++frame_;
-    if( frame_ >= texture_.GetFrameCount() - 1) {
+    if( frame_ >= texture_.GetFrameCount()) {
       if( animation_type_ == ONCE)
         is_end_ = true;
       else
         frame_ = 0;
     }
-      
   }
 }

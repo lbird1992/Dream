@@ -17,11 +17,6 @@ public:
   void SetPlay();
   void SetEnd();
 
-public://以下是按钮事件函数
-  //开始界面
-  static void ClickOnBeginGame();
-  static void ClickOnExitGame();
-
 private:
   GameState game_state_;
 };
