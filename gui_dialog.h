@@ -19,6 +19,7 @@ public:
   }
 
   virtual void EventMouseLeftHolding();
+  virtual void EventMouseLeftUp() {}
 
 protected:
 

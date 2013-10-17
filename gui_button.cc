@@ -24,11 +24,11 @@ void GUIButton::Render( const Coordinate position)
 		frame = mouse_click_frame_;
   if(texture_.GetDirectionCount() == 0)
     return;
-  texture_.Render( position + coordinate_, frame, 0);
+  texture_.Render( position + coordinate_, frame, D_ONLY);
   rect_drawed_.top = static_cast<int>((position + coordinate_).GetY());
-  rect_drawed_.bottom = static_cast<int>( (position + coordinate_).GetY() + texture_.GetHeight( frame, 0));
+  rect_drawed_.bottom = static_cast<int>( (position + coordinate_).GetY() + texture_.GetHeight( frame, D_ONLY));
   rect_drawed_.left = static_cast<int>((position + coordinate_).GetX());
-  rect_drawed_.right = static_cast<int>( (position + coordinate_).GetX() + texture_.GetWidth( frame, 0));
+  rect_drawed_.right = static_cast<int>( (position + coordinate_).GetX() + texture_.GetWidth( frame, D_ONLY));
   frame_drawed_ = frame;
   direction_drawed_ = 0;
   position_drawed_ = position + coordinate_;

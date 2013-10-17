@@ -23,11 +23,11 @@ void GUI::Render( const Coordinate position) {
   //显示自身纹理
   Coordinate position_to_draw = position + coordinate_;
   if( texture_.GetDirectionCount() != 0) {
-    texture_.Render( position_to_draw, 0, 0);
+    texture_.Render( position_to_draw, 0, D_ONLY);
     rect_drawed_.top = static_cast<int>(position_to_draw.GetY());
     rect_drawed_.left = static_cast<int>(position_to_draw.GetX());
-    rect_drawed_.bottom = static_cast<int>(position_to_draw.GetY() + texture_.GetHeight( 0, 0));
-    rect_drawed_.right = static_cast<int>(position_to_draw.GetX() + texture_.GetWidth( 0, 0));
+    rect_drawed_.bottom = static_cast<int>(position_to_draw.GetY() + texture_.GetHeight( 0, D_ONLY));
+    rect_drawed_.right = static_cast<int>(position_to_draw.GetX() + texture_.GetWidth( 0, D_ONLY));
     frame_drawed_ = 0;
     direction_drawed_ = 0;
     position_drawed_ = Coordinate( static_cast<float>(rect_drawed_.left), 

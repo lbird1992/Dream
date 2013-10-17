@@ -1,4 +1,4 @@
-//
+﻿//
 //The resource manage part of Dream Game
 //		Code By L.Bird @ 2013-10-2
 //
@@ -20,6 +20,9 @@ public:
   Texture();
   ~Texture();
 
+  inline std::string GetFilename() const {
+    return filename_;
+  }
   void LoadFile( const char* filename);//For files in normal format.
   void LoadWasFile( const char* filename);//For files in was format.
   HTEXTURE GetTexture( const int frame, const int direction) {
@@ -66,10 +69,11 @@ private:
 class ResourceManage {
 public:
   void DeleteTex( const char* filename);
+  void DeleteTexWithTexture( Texture texture);
   Texture GetTex( const char* filename);
-  
+
 private:
-  std::map< std::string, Texture> resource_map_; 
+  std::map< std::string, Texture> resource_map_;
 };
 
 //Some struct which file format *.was may use.

@@ -17,6 +17,13 @@ public:
 
   virtual void Render( const Coordinate position);
 
+  
+  void SetTexture( const char* filename) {
+    texture_ = g_resource_manage->GetTex( filename);
+    frame_ = 0;
+    frame_fill_ = 0.0f;
+  }
+
   inline int GetFrame() const {
     return frame_;
   }

@@ -1,4 +1,4 @@
-#include <stdint.h>
+ï»¿#include <stdint.h>
 #include <cstring>
 #include "resource_manage.h"
 
@@ -48,12 +48,28 @@ void ResourceManage::DeleteTex( const char* filename) {
   resource_map_.erase( it);
 }
 
+void ResourceManage::DeleteTexWithTexture( Texture texture) {
+  if( texture.GetDirectionCount() == 0)
+    return;
+  texture.Release();
+  std::map< std::string, Texture>::iterator it = resource_map_.find( texture.GetFilename() );
+  if( it == resource_map_.end()) // Don't have the file want to delete
+    return;
+  resource_map_.erase( it);
+}
+
 void Texture::LoadFile( const char* filename) {
   HGE* hge = hgeCreate( HGE_VERSION);
   filename_ = filename;
   tex_[0][0] = hge->Texture_Load( filename);
-  frame_count_ = 1;
-  direction_count_ = 1;
+  if( tex_[0][0] != 0){
+    frame_count_ = 1;
+    direction_count_ = 1;
+  }
+  else{
+    frame_count_ = 0;
+    direction_count_ = 0;
+  }
   memset( key_point_x_, 0, sizeof(key_point_x_));
   memset( key_point_y_, 0, sizeof(key_point_y_));
 }
@@ -81,7 +97,7 @@ void Texture::LoadWasFile( const char* filename) {
   fread( &direction_count_, sizeof(direction_count_), 1, fp);
   fread( &frame_count_, sizeof(frame_count_), 1, fp);
 
-  uint16_t was_width_all,was_height_all, key_point_x, key_point_y;//I don't really know where to use these four.o(¨s¡õ¨t)o
+  uint16_t was_width_all,was_height_all, key_point_x, key_point_y;//I don't really know where to use these four.o(â•¯â–¡â•°)o
   fread( &was_width_all, sizeof(was_width_all), 1, fp);
   fread( &was_height_all, sizeof(was_height_all), 1, fp);
   fread( &key_point_x, sizeof(key_point_x), 1, fp);

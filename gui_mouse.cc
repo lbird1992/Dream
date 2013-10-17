@@ -9,7 +9,7 @@ GUIMouse::GUIMouse() {
 }
 
 void GUIMouse::Render() {
-  texture_.Render( g_gui_manage->GetMousePosition(), frame_, 0);
+  texture_.Render( g_gui_manage->GetMousePosition(), frame_, D_ONLY);
   ++frame_2_;
   if( frame_2_ >= kMouseFrameFill) {
     ++frame_;

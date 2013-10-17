@@ -8,10 +8,14 @@
 #include "gui_manage.h"
 #include "game_manage.h"
 #include "gui_mouse.h"
+#include "game_logic.h"
 
 bool FrameFunc()
 {
   g_gui_manage->Control();
+  if( g_game_manage->GetGameState() == GS_PLAYING) {
+    g_game_logic->Walk();
+  }
   if( g_game_manage->GetGameState() == GS_END)
     return true;
 	return false;
@@ -53,6 +57,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
   g_gui_manage->Init();
   g_game_manage = new GameManage(); 
   g_gui_manage->GetRoot()->SetOnDraw();
+  g_game_logic = new GameLogic();
 
 	if( pHge->System_Initiate())
 	{

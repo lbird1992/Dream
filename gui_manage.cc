@@ -76,8 +76,8 @@ GUI* GUIManage::GetMouseOn() const {
 }
 
 GUI* GUIManage::GetMouseOnInNoTextureDialog( const GUI* gui) const {
-  for( std::list<GUI*>::iterator iter = gui->GetSonGuiList().begin();
-      iter != gui->GetSonGuiList().end(); ++iter) {
+  std::list<GUI*> son_list = gui->GetSonGuiList();
+  for( std::list<GUI*>::iterator iter = son_list.begin(); iter != son_list.end(); ++iter) {
     if( (*iter)->IsDraw() == false)
       continue;
     RECT rect = (*iter)->GetRectDrawed();

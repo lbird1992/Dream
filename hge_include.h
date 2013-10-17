@@ -27,6 +27,12 @@ public:
   inline float GetY() const {
     return y_;
   }
+  inline void SetX(const float x) {
+    x_ = x;
+  }
+  inline void SetY( const float y) {
+    y_ = y;
+  }
   Coordinate Plus(const Coordinate c) {
     x_ += c.GetX();
     y_ += c.GetY();

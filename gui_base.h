@@ -18,6 +18,18 @@ enum GuiType {
   GUI_ANIMATION
 };
 
+enum Direction {
+  D_RIGHT_DOWN = 0,
+  D_LEFT_DOWN,
+  D_LEFT_UP,
+  D_RIGHT_UP,
+  D_DOWN,
+  D_LEFT,
+  D_UP,
+  D_RIGHT,
+  D_ONLY = 0
+};
+
 class GUI {
 public:
   GUI( const char* filename, const Coordinate position,const GUI* father);
