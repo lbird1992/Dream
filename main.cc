@@ -9,12 +9,26 @@
 #include "game_manage.h"
 #include "gui_mouse.h"
 #include "game_logic.h"
+<<<<<<< HEAD
+=======
+#include "gui_textview.h"
+
+int frames = 0;
+>>>>>>> b4f382eccb22b6eea45217fa2da923cd1f98d1b1
 
 bool FrameFunc()
 {
   g_gui_manage->Control();
   if( g_game_manage->GetGameState() == GS_PLAYING) {
     g_game_logic->Walk();
+<<<<<<< HEAD
+=======
+    frames++;
+    if( frames == 300)
+      g_gui_text_view->AddString( "Hello World!");
+    else if( frames == 303)
+      g_gui_text_view->AddString( "Hello World!");
+>>>>>>> b4f382eccb22b6eea45217fa2da923cd1f98d1b1
   }
   if( g_game_manage->GetGameState() == GS_END)
     return true;
@@ -26,7 +40,11 @@ bool RenderFunc()
 	HGE* pHge = hgeCreate( HGE_VERSION);
 	pHge->Gfx_BeginScene();
 	pHge->Gfx_Clear( 0xFFFFFFFF);
+<<<<<<< HEAD
   
+=======
+ 
+>>>>>>> b4f382eccb22b6eea45217fa2da923cd1f98d1b1
   g_gui_manage->Render();
   g_gui_mouse->Render();
 
