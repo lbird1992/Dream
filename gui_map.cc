@@ -8,7 +8,8 @@ GUIMap::GUIMap() : GUIDialog( "image\\other\\back.jpg", Coordinate(0, 0)) {
 void GUIMap::ResetMapID( const int map_id, const Coordinate map_center) {
   MapData map_data = g_game_logic->GetMapData( map_id);
   map_image_ = map_data.map_image;
-  map_max_ = Coordinate( map_data.map_x_max+0.5f, map_data.map_y_max+0.5f);//加0.5防止数据类型转换时的舍入误差
+  map_max_ = Coordinate( static_cast<float>(map_data.map_x_max), 
+                      static_cast<float>(map_data.map_y_max));//加0.5防止数据类型转换时的舍入误差
   if( map_max_.GetX() - 16 < map_center.GetX())
     map_center_.SetX( map_max_.GetX()-16);
   else
@@ -119,11 +120,11 @@ void GUIMap::Render( const Coordinate coordinate) {
   }
   if( map_center_.GetX() < 16)
     map_center_.SetX( 16);
-  else if( map_center_.GetX() > map_max_.GetX() - 16)
+  else if( map_center_.GetX() >= map_max_.GetX() - 16)
     map_center_.SetX( map_max_.GetX() - 16);
   if( map_center_.GetY() < 12)
     map_center_.SetY( 12);
-  else if( map_center_.GetY() > map_max_.GetY() - 12)
+  else if( map_center_.GetY() >= map_max_.GetY() - 12)
     map_center_.SetY( map_max_.GetY() - 12);
 }
 

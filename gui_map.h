@@ -6,7 +6,7 @@
 #include "gui_dialog.h"
 #include "gui_hero.h"
 
-const float kMapSpeedLow = 0.2f;
+const float kMapSpeedLow = 0.23f;
 const float kMapSpeedHigh = 0.34f;
 
 class GUIMap : public GUIDialog {
