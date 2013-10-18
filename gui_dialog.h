@@ -2,7 +2,6 @@
 #define _DREAM_GUIDIALOG_
 
 #include "gui_base.h"
-#include "gui_manage.h"
 
 class GUIDialog : public GUI {
 public:
@@ -19,11 +18,8 @@ public:
     father_gui_->AddSon( this);
   }
 
-  virtual void EventMouseLeftHolding() {
-    Coordinate mouse_position = g_gui_manage->GetMousePosition();
-    Coordinate mouse_position_previous = g_gui_manage->GetMousePositionPrevious();
-    coordinate_.Plus( mouse_position - mouse_position_previous);
-  }
+  virtual void EventMouseLeftHolding();
+  virtual void EventMouseLeftUp() {}
 
 protected:
 

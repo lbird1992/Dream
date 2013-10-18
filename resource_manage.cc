@@ -1,11 +1,13 @@
-#include <stdint.h>
+ï»¿#include <stdint.h>
 #include <cstring>
 #include "resource_manage.h"
 
 ResourceManage* g_resource_manage;
 
-Texture::Texture() : frame_count_(0), direction_count_(0), key_point_x_(0), key_point_y_(0) {
+Texture::Texture() : frame_count_(0), direction_count_(0) {
   memset( tex_, 0, sizeof(tex_));
+  memset( key_point_x_, 0, sizeof(key_point_x_));
+  memset( key_point_y_, 0, sizeof(key_point_y_));
 }
 
 Texture::~Texture() {
@@ -46,14 +48,30 @@ void ResourceManage::DeleteTex( const char* filename) {
   resource_map_.erase( it);
 }
 
+void ResourceManage::DeleteTexWithTexture( Texture texture) {
+  if( texture.GetDirectionCount() == 0)
+    return;
+  texture.Release();
+  std::map< std::string, Texture>::iterator it = resource_map_.find( texture.GetFilename() );
+  if( it == resource_map_.end()) // Don't have the file want to delete
+    return;
+  resource_map_.erase( it);
+}
+
 void Texture::LoadFile( const char* filename) {
   HGE* hge = hgeCreate( HGE_VERSION);
   filename_ = filename;
   tex_[0][0] = hge->Texture_Load( filename);
-  frame_count_ = 1;
-  direction_count_ = 1;
-  key_point_x_ = 0;
-  key_point_y_ = 0;
+  if( tex_[0][0] != 0){
+    frame_count_ = 1;
+    direction_count_ = 1;
+  }
+  else{
+    frame_count_ = 0;
+    direction_count_ = 0;
+  }
+  memset( key_point_x_, 0, sizeof(key_point_x_));
+  memset( key_point_y_, 0, sizeof(key_point_y_));
 }
 
 void Texture::LoadWasFile( const char* filename) {
@@ -79,11 +97,11 @@ void Texture::LoadWasFile( const char* filename) {
   fread( &direction_count_, sizeof(direction_count_), 1, fp);
   fread( &frame_count_, sizeof(frame_count_), 1, fp);
 
-  uint16_t was_width_all,was_height_all;//I don't really know where to use these two.o(¨s¡õ¨t)o
+  uint16_t was_width_all,was_height_all, key_point_x, key_point_y;//I don't really know where to use these four.o(â•¯â–¡â•°)o
   fread( &was_width_all, sizeof(was_width_all), 1, fp);
   fread( &was_height_all, sizeof(was_height_all), 1, fp);
-  fread( &key_point_x_, sizeof(key_point_x_), 1, fp);
-  fread( &key_point_y_, sizeof(key_point_y_), 1, fp);
+  fread( &key_point_x, sizeof(key_point_x), 1, fp);
+  fread( &key_point_y, sizeof(key_point_y), 1, fp);
 
   WPixel color_board_from_file[256];
   fread( color_board_from_file, sizeof(color_board_from_file), 1, fp);//Read the pal.
@@ -97,9 +115,9 @@ void Texture::LoadWasFile( const char* filename) {
       //Jump to the frame head.
       fseek( fp, image_offset[ i*frame_count_ + j] + offset_start, SEEK_SET);
 
-      int key_point_x, key_point_y, frame_width, frame_height;
-      fread( &key_point_x, sizeof(key_point_x), 1, fp);
-      fread( &key_point_y, sizeof(key_point_y), 1, fp);
+      int frame_width, frame_height;
+      fread( &key_point_x_[j][i], sizeof(key_point_x_[j][i]), 1, fp);
+      fread( &key_point_y_[j][i], sizeof(key_point_y_[j][i]), 1, fp);
       fread( &frame_width, sizeof(frame_width), 1, fp);
       fread( &frame_height, sizeof(frame_height), 1, fp);
 
@@ -179,6 +197,22 @@ void Texture::LoadWasFile( const char* filename) {
   fclose(fp);
 }
 
+int Texture::GetKeyPointX( const int frame, const int direction) const {
+  if( frame >= frame_count_)
+    return 0;
+  if( direction >= direction_count_)
+    return 0;
+  return key_point_x_[frame][direction];
+}
+
+int Texture::GetKeyPointY( const int frame, const int direction) const {
+  if( frame >= frame_count_)
+    return 0;
+  if( direction >= direction_count_)
+    return 0;
+  return key_point_y_[frame][direction];
+}
+
 void Texture::Render( const Coordinate position, const int frame, const int direction) {
   HGE* hge = hgeCreate( HGE_VERSION);
   if( frame >= frame_count_) {
@@ -200,8 +234,8 @@ void Texture::Render( const Coordinate position, const int frame, const int dire
   hgeSprite* spr = new hgeSprite( tex_[frame][direction], 0, 0,//the left-top of texture.
                                 static_cast<float>(width),
                                 static_cast<float>(height));
-  Coordinate position_to_draw = position + Coordinate( static_cast<float>( key_point_x_), 
-                                                 static_cast<float>( key_point_y_));
+  Coordinate position_to_draw = position - Coordinate( static_cast<float>( key_point_x_[frame][direction]), 
+                                                 static_cast<float>( key_point_y_[frame][direction]));
   spr->Render( position_to_draw.GetX(), position_to_draw.GetY());
   delete spr;
 }
@@ -229,8 +263,9 @@ void Texture::RenderEx( const Coordinate destination_position,
                                 source_position.GetX(),
                                 source_position.GetY(),
                                 static_cast<float>(width), static_cast<float>(height));
-  Coordinate position_to_draw = destination_position + Coordinate( static_cast<float>( key_point_x_), 
-                                                            static_cast<float>(key_point_y_));
+  Coordinate position_to_draw = destination_position - 
+            Coordinate( static_cast<float>( key_point_x_[frame][direction]), 
+                        static_cast<float>( key_point_y_[frame][direction]));
   spr->Render( position_to_draw.GetX(), position_to_draw.GetY());
   delete spr;
 }

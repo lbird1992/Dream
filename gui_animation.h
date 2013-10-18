@@ -8,7 +8,7 @@ enum AnimationType {
   LOOP = 2//循环播放
 };
 
-const int kFrameFill = 4;
+const int kFrameFill = 8;
 
 class GUIAnimation : public GUI {
 public:
@@ -16,6 +16,13 @@ public:
                 const AnimationType type);
 
   virtual void Render( const Coordinate position);
+
+  
+  void SetTexture( const char* filename) {
+    texture_ = g_resource_manage->GetTex( filename);
+    frame_ = 0;
+    frame_fill_ = 0.0f;
+  }
 
   inline int GetFrame() const {
     return frame_;
@@ -39,12 +46,22 @@ public:
     return is_end_;
   }
 
+  static float GetSpeed() {
+    return speed_;
+  }
+
+  static void SetSpeed(const float speed){
+     speed_ = speed;
+  }
+
 protected:
   AnimationType animation_type_;
   bool is_end_;//此值只对type==LOOP 情况有效
   int frame_;
-  int frame_fill_;
+  float frame_fill_;
   int direction_;
+
+  static float speed_;
 };
 
 #endif

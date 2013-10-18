@@ -3,11 +3,14 @@
 
 #include "gui_base.h"
 #include "gui_animation.h"
+#include "gui_button.h"
+#include "gui_dialog.h"
 
 class GUIManage {
 public:
 
   void Init();
+  void Reset();
 
   void Render() const;
   void Control();

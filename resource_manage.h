@@ -1,4 +1,4 @@
-//
+﻿//
 //The resource manage part of Dream Game
 //		Code By L.Bird @ 2013-10-2
 //
@@ -20,6 +20,9 @@ public:
   Texture();
   ~Texture();
 
+  inline std::string GetFilename() const {
+    return filename_;
+  }
   void LoadFile( const char* filename);//For files in normal format.
   void LoadWasFile( const char* filename);//For files in was format.
   HTEXTURE GetTexture( const int frame, const int direction) {
@@ -30,17 +33,13 @@ public:
     return tex_[frame][direction];
   }
   inline int16_t GetFrameCount() const{
-    return frame_count_ + 1;
+    return frame_count_;
   }
   inline int16_t GetDirectionCount() const{
-    return direction_count_ + 1;
+    return direction_count_;
   }
-  inline int16_t GetKeyPointX() const {
-    return key_point_x_;
-  }
-  inline int16_t GetKeyPointY() const {
-    return key_point_y_;
-  }
+  inline int GetKeyPointX( const int frame, const int direction) const;
+  inline int GetKeyPointY( const int frame, const int direction) const;
   inline int GetWidth( const int frame, const int direction) const {
     HGE* hge = hgeCreate( HGE_VERSION);
     return hge->Texture_GetWidth( tex_[frame][direction]);
@@ -63,17 +62,18 @@ private:
   HTEXTURE tex_[kMaxFrame][8];
   int16_t frame_count_;
   int16_t direction_count_;
-  int16_t key_point_x_;
-  int16_t key_point_y_;
+  int key_point_x_[kMaxFrame][8];
+  int key_point_y_[kMaxFrame][8];
 };
 
 class ResourceManage {
 public:
   void DeleteTex( const char* filename);
+  void DeleteTexWithTexture( Texture texture);
   Texture GetTex( const char* filename);
-  
+
 private:
-  std::map< std::string, Texture> resource_map_; 
+  std::map< std::string, Texture> resource_map_;
 };
 
 //Some struct which file format *.was may use.
@@ -82,7 +82,7 @@ private:
 struct WPixel {  
     union {  
 		uint16_t color;
-        struct {								// 16bit 565ģʽ
+        struct {								// 16bit 565ģ
             uint16_t blue:5;                        
             uint16_t green:6;                       
             uint16_t red:5;                         

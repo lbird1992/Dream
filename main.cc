@@ -5,12 +5,27 @@
 #include <process.h>
 #include "hge_include.h"
 #include "resource_manage.h"
+#include "gui_manage.h"
+#include "game_manage.h"
+#include "gui_mouse.h"
+#include "game_logic.h"
+#include "gui_textview.h"
 
-int frame = 0, direction = 0;
-int mouse_frame = 0, mouse_direction = 0;
+int frames = 0;
 
 bool FrameFunc()
 {
+  g_gui_manage->Control();
+  if( g_game_manage->GetGameState() == GS_PLAYING) {
+    g_game_logic->Walk();
+    frames++;
+    if( frames == 300)
+      g_gui_text_view->AddString( "Hello World!");
+    else if( frames == 303)
+      g_gui_text_view->AddString( "Hello World!");
+  }
+  if( g_game_manage->GetGameState() == GS_END)
+    return true;
 	return false;
 }
 
@@ -19,28 +34,10 @@ bool RenderFunc()
 	HGE* pHge = hgeCreate( HGE_VERSION);
 	pHge->Gfx_BeginScene();
 	pHge->Gfx_Clear( 0xFFFFFFFF);
-  
-  Texture mouse = g_resource_manage->GetTex( "cursor.was");
-  Texture tex = g_resource_manage->GetTex( "1.was");
-  float x,y;
-  pHge->Input_GetMousePos( &x, &y);
-  tex.Render( Coordinate(400, 400), frame, direction);
-  mouse.Render( Coordinate( x, y), mouse_frame, mouse_direction);
-  ++frame;
-  ++mouse_frame;
-  if( frame >= tex.GetFrameCount()-1){
-    frame = 0, ++direction;
-    if( direction >= tex.GetDirectionCount()-1) {
-      direction = 0;
-    }
-  }
-  if( mouse_frame >= mouse.GetFrameCount()-1){
-    mouse_frame = 0, ++mouse_direction;
-    if( mouse_direction >= mouse.GetDirectionCount()-1) {
-      mouse_direction = 0;
-    }
-  }
-  
+ 
+  g_gui_manage->Render();
+  g_gui_mouse->Render();
+
 	pHge->Gfx_EndScene();
 	return false;
 }
@@ -64,9 +61,16 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	pHge->System_SetState( HGE_ZBUFFER, false);
 	pHge->System_SetState( HGE_FPS, 30);
   g_resource_manage = new ResourceManage();
+  g_gui_manage = new GUIManage();
+  g_gui_manage->Init();
+  g_game_manage = new GameManage(); 
+  g_gui_manage->GetRoot()->SetOnDraw();
+  g_game_logic = new GameLogic();
 
 	if( pHge->System_Initiate())
 	{
+    g_gui_mouse = new GUIMouse();
+    g_game_manage->SetBegin();
 		pHge->System_Start();
 	}
 	pHge->Release();
