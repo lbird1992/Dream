@@ -13,6 +13,10 @@ void GUIMap::ResetMapID( const int map_id, const Coordinate map_center) {
   if( map_file_ != NULL) {
     fclose( map_file_);
   }
+  if( block_offset_ != NULL)
+    delete block_offset_;
+  if( mask_data_ != NULL)
+    delete mask_data_;
   HGE* hge = hgeCreate( HGE_VERSION);
   if( big_map_texture_ != 0)
     hge->Texture_Free( big_map_texture_);
