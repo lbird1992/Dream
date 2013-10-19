@@ -40,7 +40,6 @@ void GUITextView::Render(const Coordinate position){
       it->x -= kHintSpeed;
       if( it->x + font_->GetTextSize( it->str.c_str()).cx <= 0)
         string_list_.erase( it++);
-       // a.remove( (*it++));
       else
         ++it;
       continue;

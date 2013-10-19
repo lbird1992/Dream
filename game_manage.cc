@@ -4,10 +4,7 @@
 #include "gui_map.h"
 #include "game_logic.h"
 #include "gui_hud.h"
-<<<<<<< HEAD
-=======
 #include "gui_textview.h"
->>>>>>> b4f382eccb22b6eea45217fa2da923cd1f98d1b1
 
 GameManage* g_game_manage;
 
@@ -23,11 +20,11 @@ void GameManage::SetPlay() {
   g_gui_manage->Reset();
   g_game_logic->LoadMapIni();
   g_game_logic->SetMapID( 1);
-  g_game_logic->SetPlayerCoordinate( Coordinate(500, 220));
-  g_game_logic->SetMapAim( Coordinate(500,220));
+  g_game_logic->SetPlayerCoordinate( Coordinate(75, 58));
+  g_game_logic->SetMapAim( Coordinate(75,58));
   g_game_logic->SetPlayerDirection( 1);
   gui_map_ = new GUIMap();
-  gui_map_->ResetMapID( 1, Coordinate( 500, 220));
+  gui_map_->ResetMapID( 1, Coordinate( 75, 58));
   GUIHero* player = new GUIHero( "image\\hero\\2", Coordinate(0, 0), gui_map_);
   gui_map_->SetPlayerGUI( player);
   gui_map_->SetOnDraw();
@@ -35,15 +32,11 @@ void GameManage::SetPlay() {
   gui_hud->Init();
   gui_hud->SetOnDraw();
   g_gui_manage->GetRoot()->AddSon( gui_map_);
-<<<<<<< HEAD
   g_gui_manage->GetRoot()->AddSon( gui_hud);
-=======
   g_gui_manage->GetRoot()->AddSon( gui_hud);//人物小头像
   g_gui_text_view = new GUITextView(g_gui_manage->GetRoot());//整个GUI树的根节点
   g_gui_text_view->SetOnDraw();
   g_gui_manage->GetRoot()->AddSon( g_gui_text_view);
-  //gui_text_view->AddString( "Hello World!");
->>>>>>> b4f382eccb22b6eea45217fa2da923cd1f98d1b1
   g_gui_manage->GetRoot()->SetOnDraw();
 }
 

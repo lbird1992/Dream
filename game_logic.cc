@@ -33,6 +33,14 @@ void GameLogic::Walk() {
     x_speed *= -1;
   if( y_length < 0)
     y_speed *= -1;
+  if( g_game_manage->GetMap()->GetCell( 
+                          map_coordinate_ + Coordinate(static_cast<float>(x_speed), 
+                                                      static_cast<float>(y_speed))) == 1)
+  {
+    map_coordinate_to_go_ = map_coordinate_;
+    g_game_manage->GetMap()->GetPlayerGUI()->EndAnimation();
+    return;
+  }
   map_coordinate_.Plus( Coordinate(static_cast<float>(x_speed), static_cast<float>(y_speed)));
   
   if( x_speed > 0 && y_speed > 0)
