@@ -3,10 +3,11 @@
 
 const int MAX = 32;
 void GameLogic::LoadMapIni() {
-  int i;
   FILE* fp = fopen( "data\\map.ini","r");
-  while( fscanf( fp, "%d", &i) != EOF)
-    fscanf(fp, "%d %d %d", &map_data_[i].map_image, &map_data_[i].map_x_max, &map_data_[i].map_y_max);
+  for( int i=1; ; ++i) {
+    if( fscanf(fp, "%d %s", &map_data_[i].map_image, map_name) == EOF)
+      break;
+  }
   fclose(fp);
 }
 
@@ -14,7 +15,7 @@ void GameLogic::Walk() {
   float x_length = (map_coordinate_to_go_ - map_coordinate_).GetX();
   float y_length = (map_coordinate_to_go_ - map_coordinate_).GetY();
   if( x_length * x_length + y_length * y_length < kWalkSpeed * kWalkSpeed) {
-    //Æ«ÒÆÁ¿²»×ãÒ»Ö¡ÒÆ¶¯
+    //Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ö¡ï¿½Æ¶ï¿½
     map_coordinate_ = map_coordinate_to_go_;
     g_game_manage->GetMap()->GetPlayerGUI()->EndAnimation();
     return;
@@ -39,6 +40,32 @@ void GameLogic::Walk() {
     map_coordinate_to_go_ = map_coordinate_;
     g_game_manage->GetMap()->GetPlayerGUI()->EndAnimation();
     return;
+  }
+  else if( g_game_manage->GetMap()->GetCell( 
+                                    map_coordinate_ + Coordinate(static_cast<float>(x_speed),
+                                                                static_cast<float>(y_speed))) == 2) {
+    //TODO:æ‰¾åˆ°ä¼ é€ç‚¹
+    int x = static_cast<int>(map_coordinate_.GetX() + x_speed);
+    int y = static_cast<int>(map_coordinate_.GetY() + y_speed);
+    std::list<TransformData> transform_data = g_game_manage->GetMap()->GetTransformData();
+    if( transform_data.size() != 0) {
+      double min_distance = 10000.0;
+      TransformData nearest_transform;
+      for( std::list<TransformData>::iterator iter = transform_data.begin(); iter != transform_data.end(); ++iter) {
+        int x_distance = x-iter->src_x;
+        int y_distance = y-iter->src_y;
+        if( min_distance*min_distance > x_distance*x_distance + y_distance*y_distance) {
+          min_distance = sqrt( static_cast<double>(x_distance*x_distance+y_distance*y_distance));
+          nearest_transform = *iter;
+        }
+      }
+      map_coordinate_ = Coordinate( static_cast<float>(nearest_transform.dst_x), 
+                                    static_cast<float>(nearest_transform.dst_y));
+      map_id_ = nearest_transform.dst_map_id;
+      g_game_manage->GetMap()->ResetMapID( map_id_, map_coordinate_);
+      map_coordinate_to_go_ = map_coordinate_;
+      g_game_manage->GetMap()->GetPlayerGUI()->EndAnimation();
+    }
   }
   map_coordinate_.Plus( Coordinate(static_cast<float>(x_speed), static_cast<float>(y_speed)));
   
@@ -73,7 +100,7 @@ int Player::NewPlayer(int ID,char* name,int image){
 	hero.image_ = image;
 
 	if( image_/4 == 0)
-	{//ÈË×å
+	{//ï¿½ï¿½ï¿½ï¿½
 		hero.tizhi_ = hero.moli_ = hero.liliang_ = hero.naili_ = hero.minjie_ = 10;
 		hero.hp_ = hero.hp2_ = hero.hp3_ = 150;
 		hero.mp_ = hero.mp2_ = 110;
@@ -85,7 +112,7 @@ int Player::NewPlayer(int ID,char* name,int image){
 		hero.lingli_ = 16;
 	}
 	else if( image_/4 == 1)
-	{//Ìì×å
+	{//ï¿½ï¿½ï¿½ï¿½
 		hero.tizhi_ = 12, hero.moli_ = 5, hero.liliang_ = 11, hero.naili_ = 12, hero.minjie_ = 10;
 		hero.hp_ = hero.hp2_ = hero.hp3_ = 154;
 		hero.mp_ = hero.mp2_ = 97.5;
@@ -97,7 +124,7 @@ int Player::NewPlayer(int ID,char* name,int image){
 		hero.lingli_ = 13.9;
 	}
 	else
-	{//Ä§×å
+	{//Ä§ï¿½ï¿½
 		hero.tizhi_ = 12, hero.moli_ = 11, hero.liliang_ = 11, hero.naili_ = 8, hero.minjie_ = 8;
 		hero.hp_ = hero.hp2_ = hero.hp3_ = 172;
 		hero.mp_ = hero.mp2_ = 107.5;
@@ -124,7 +151,7 @@ void Player::ChangePoint(int playerID, int tizhi, int moli, int liliang, int nai
   Player hero;
 	if( tizhi + moli + liliang + naili + minjie > hero.qianli_)
 		return;
-	if( hero.image_/4 == 0)//ÈË×å
+	if( hero.image_/4 == 0)//ï¿½ï¿½ï¿½ï¿½
 	{
 		hero.hp3_ += tizhi*5;
 		hero.mp2_ += moli*3;
@@ -132,7 +159,7 @@ void Player::ChangePoint(int playerID, int tizhi, int moli, int liliang, int nai
 		hero.mingzhong_ += liliang*2.01;
 		hero.fangyu_ += naili*1.5;
 	}
-	else if( hero.image_/4 == 1)//Ìì×å
+	else if( hero.image_/4 == 1)//ï¿½ï¿½ï¿½ï¿½
 	{
 		hero.hp3_ += tizhi*4.5;
 		hero.mp2_ += moli*3.5;
@@ -140,7 +167,7 @@ void Player::ChangePoint(int playerID, int tizhi, int moli, int liliang, int nai
 		hero.mingzhong_ += liliang*1.71;
 		hero.fangyu_ += naili*1.6;
 	}
-	else//Ä§×å
+	else//Ä§ï¿½ï¿½
 	{
 		hero.hp3_ += tizhi*6;
 		hero.mp2_ += moli * 2.5;
@@ -155,7 +182,7 @@ void Player::ChangePoint(int playerID, int tizhi, int moli, int liliang, int nai
 		hero.hp_ = hero.hp2_ = hero.hp3_;
 	if( moli != 0)
 		hero.mp_ = hero.mp2_;
-	//Ç¿ÉíÚ¤ÏëµÈÊôĞÔÓ°ÏìÎ´Ìí¼Ó
+	//Ç¿ï¿½ï¿½Ú¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½
 
 	hero.qianli_ -= tizhi + moli + liliang + naili + minjie;
 	hero.tizhi_ += tizhi;
