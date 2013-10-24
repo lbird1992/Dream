@@ -4,10 +4,12 @@
 GameLogic* g_game_logic;
 
 void GameLogic::LoadMapIni() {
-  int i;
+  char map_name[256];
   FILE* fp = fopen( "data\\map.ini","r");
-  while( fscanf( fp, "%d", &i) != EOF)
-    fscanf(fp, "%d %d %d", &map_data_[i].map_image, &map_data_[i].map_x_max, &map_data_[i].map_y_max);
+  for( int i=1; ; ++i) {
+    if( fscanf(fp, "%d %s", &map_data_[i].map_image, map_name) == EOF)
+      break;
+  }
   fclose(fp);
 }
 
@@ -40,6 +42,32 @@ void GameLogic::Walk() {
     map_coordinate_to_go_ = map_coordinate_;
     g_game_manage->GetMap()->GetPlayerGUI()->EndAnimation();
     return;
+  }
+  else if( g_game_manage->GetMap()->GetCell( 
+                                    map_coordinate_ + Coordinate(static_cast<float>(x_speed),
+                                                                static_cast<float>(y_speed))) == 2) {
+    //TODO:ÕÒµ½´«ËÍµã
+    int x = static_cast<int>(map_coordinate_.GetX() + x_speed);
+    int y = static_cast<int>(map_coordinate_.GetY() + y_speed);
+    std::list<TransformData> transform_data = g_game_manage->GetMap()->GetTransformData();
+    if( transform_data.size() != 0) {
+      double min_distance = 10000.0;
+      TransformData nearest_transform;
+      for( std::list<TransformData>::iterator iter = transform_data.begin(); iter != transform_data.end(); ++iter) {
+        int x_distance = x-iter->src_x;
+        int y_distance = y-iter->src_y;
+        if( min_distance*min_distance > x_distance*x_distance + y_distance*y_distance) {
+          min_distance = sqrt( static_cast<double>(x_distance*x_distance+y_distance*y_distance));
+          nearest_transform = *iter;
+        }
+      }
+      map_coordinate_ = Coordinate( static_cast<float>(nearest_transform.dst_x), 
+                                    static_cast<float>(nearest_transform.dst_y));
+      map_id_ = nearest_transform.dst_map_id;
+      g_game_manage->GetMap()->ResetMapID( map_id_, map_coordinate_);
+      map_coordinate_to_go_ = map_coordinate_;
+      g_game_manage->GetMap()->GetPlayerGUI()->EndAnimation();
+    }
   }
   map_coordinate_.Plus( Coordinate(static_cast<float>(x_speed), static_cast<float>(y_speed)));
   

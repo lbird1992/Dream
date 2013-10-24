@@ -5,13 +5,11 @@
 #include <stdint.h>
 #include "hge_include.h"
 
-const int kMaxMapCount = 100;//游戏中地图单体的最大数量
+const int kMaxMapCount = 300;//游戏中地图单体的最大数量
 const double kWalkSpeed = 0.27;//行走速度
 
 struct MapData {
   int map_image;
-  int map_x_max;
-  int map_y_max;
 };
 
 class GameLogic {

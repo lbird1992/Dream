@@ -33,8 +33,8 @@ void GUIMap::ResetMapID( const int map_id, const Coordinate map_center) {
   fread( &map_flag, sizeof( map_flag), 1, map_file_);
   fread( &map_width, sizeof( map_width), 1, map_file_);
   fread( &map_height, sizeof( map_height), 1, map_file_);
-  map_block_row_count_ = static_cast<int>(ceil( static_cast<double>(map_width / 320.0)));
-  map_block_col_count_ = static_cast<int>(ceil( static_cast<double>(map_height/ 240.0)));
+  map_block_col_count_ = static_cast<int>(ceil( static_cast<double>(map_width / 320.0)));
+  map_block_row_count_ = static_cast<int>(ceil( static_cast<double>(map_height/ 240.0)));
   map_block_count_ = map_block_row_count_ * map_block_col_count_;
   block_offset_ = new uint32_t[map_block_count_];
   fread( block_offset_, sizeof(uint32_t)*map_block_count_, 1, map_file_);//读取地图数据偏移量
@@ -95,16 +95,47 @@ void GUIMap::ResetMapID( const int map_id, const Coordinate map_center) {
         continue;
       if( map_y_sum_ + y < 0)
         continue;
-      ReadBlock( (map_y_sum_ + y)*map_block_row_count_ + map_x_sum_ + x, x, y);
+      if( map_x_sum_ + x >= map_block_col_count_)
+        continue;
+      if( map_y_sum_ + y >= map_block_row_count_)
+        continue;
+      ReadBlock( (map_y_sum_ + y)*map_block_col_count_ + map_x_sum_ + x, x, y);
     }
   }
   SetMask( map_x_sum_, map_y_sum_);
+
+  //读取转换数据
+  sprintf( filename, "data\\map_data\\%d.ini", map_id);
+  FILE* fp = fopen( filename, "r");
+  if( fp == 0)
+    return;
+  transform_data_list_.clear();
+  int src_x, src_y, dst_id, dst_x, dst_y;
+  while( fscanf(fp, "%d", &src_x) != EOF) {
+    fscanf( fp, "%d %d %d %d", &src_y, &dst_id, &dst_x, &dst_y);
+    src_y = static_cast<int>(map_max_.GetY() - src_y);
+    sprintf( filename, "image\\scene\\%d.map", g_game_logic->GetMapData(dst_id).map_image );
+    FILE* map_tmp = fopen( filename, "rb");
+    fread( &map_flag, sizeof( map_flag), 1, map_tmp);
+    fread( &map_width, sizeof( map_width), 1, map_tmp);
+    fread( &map_height, sizeof( map_height), 1, map_tmp);
+    fclose(map_tmp);
+    dst_y = map_height/20 - dst_y;
+    TransformData transform_data;
+    transform_data.src_x = src_x;
+    transform_data.src_y = src_y;
+    transform_data.dst_map_id = dst_id;
+    transform_data.dst_x = dst_x;
+    transform_data.dst_y = dst_y;
+    transform_data_list_.push_back( transform_data);
+  }
+  fclose( fp);
 }
 
 uint8_t GUIMap::GetCell( const Coordinate position) const {
   int x = static_cast<int>(position.GetX() - map_x_sum_*16);
   int y = static_cast<int>(position.GetY() - map_y_sum_*12);
-  return cell_data_[y][x];
+  return cell_data_[y*48+x];
 }
 
 void GUIMap::ReadBlock( const int block_id, const int x, const int y) {
@@ -128,8 +159,7 @@ void GUIMap::ReadBlock( const int block_id, const int x, const int y) {
   uint32_t jpg_size = 0;
   uint8_t* jpg_data = JpgHandler( map_jpg_data, size, &jpg_size);
   HGE* hge = hgeCreate(HGE_VERSION);
-  HTEXTURE map_texture;
-  map_texture = hge->Texture_Load( (const char*)jpg_data, jpg_size);
+  HTEXTURE map_texture = hge->Texture_Load( (const char*)jpg_data, jpg_size);
   delete map_jpg_data;
   delete jpg_data;
 
@@ -147,8 +177,9 @@ void GUIMap::ReadBlock( const int block_id, const int x, const int y) {
   if( flag != 0x43454C4C) {
     //文件格式可能错误
   }
-  for( int i=0; i<=12; i++) {
-    fread( cell_data_[y*12+i] + x*16, sizeof(uint8_t), 16, map_file_);
+  for( int i=0; i<12; i++) {
+    fread( &cell_data_[(y*12+i)*48+x*16], sizeof(uint8_t), 16, map_file_);
+    //fread( cell_data_[y*12+i] + x*16, sizeof(uint8_t), 16, map_file_);
   }
 }
 
@@ -188,7 +219,11 @@ void GUIMap::LoadMap() {
         continue;
       if( map_x_sum + x < 0)
         continue;
-      ReadBlock( (map_y_sum_ + y)*map_block_row_count_ + map_x_sum_ + x, x, y);
+      if( map_y_sum + y >= map_block_row_count_)
+        continue;
+      if( map_x_sum + x >= map_block_col_count_)
+        continue;
+      ReadBlock( (map_y_sum_ + y)*map_block_col_count_ + map_x_sum_ + x, x, y);
     }
   }
   SetMask( map_x_sum_, map_y_sum_);

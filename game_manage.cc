@@ -20,11 +20,11 @@ void GameManage::SetPlay() {
   g_gui_manage->Reset();
   g_game_logic->LoadMapIni();
   g_game_logic->SetMapID( 1);
-  g_game_logic->SetPlayerCoordinate( Coordinate(75, 58));
-  g_game_logic->SetMapAim( Coordinate(75,58));
+  g_game_logic->SetPlayerCoordinate( Coordinate(11, 274));
+  g_game_logic->SetMapAim( Coordinate(11,274));
   g_game_logic->SetPlayerDirection( 1);
   gui_map_ = new GUIMap();
-  gui_map_->ResetMapID( 1, Coordinate( 75, 58));
+  gui_map_->ResetMapID( 1, Coordinate( 11, 274));
   GUIHero* player = new GUIHero( "image\\hero\\2", Coordinate(0, 0), gui_map_);
   gui_map_->SetPlayerGUI( player);
   gui_map_->SetOnDraw();

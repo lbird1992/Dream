@@ -9,6 +9,14 @@
 const float kMapSpeedLow = 0.23f;
 const float kMapSpeedHigh = 0.34f;
 
+struct TransformData {//地图的转换数据
+  int src_x;//起始点坐标
+  int src_y;
+  int dst_map_id;//目标点地图ID
+  int dst_x;//目标点坐标
+  int dst_y;
+};
+
 struct MaskData {
   int start_x;
   int start_y;
@@ -44,6 +52,10 @@ public:
     return gui_player_;
   }
   uint8_t GetCell( const Coordinate position) const;
+  
+  std::list<TransformData> GetTransformData() const {
+    return transform_data_list_;
+  }
 
 private:
   FILE* map_file_;
@@ -56,7 +68,8 @@ private:
   int mask_count_;
   MaskData* mask_data_;
   std::list<int> mask_index_to_draw_;
-  uint8_t cell_data_[48][36];
+  std::list<TransformData> transform_data_list_;
+  uint8_t cell_data_[48*36];
 
   Coordinate map_center_;//窗口中心点对应的地图坐标
   int map_image_;

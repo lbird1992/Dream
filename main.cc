@@ -10,19 +10,11 @@
 #include "gui_mouse.h"
 #include "game_logic.h"
 #include "gui_textview.h"
-
-int frames = 0;
-
 bool FrameFunc()
 {
   g_gui_manage->Control();
   if( g_game_manage->GetGameState() == GS_PLAYING) {
     g_game_logic->Walk();
-    frames++;
-    if( frames == 300)
-      g_gui_text_view->AddString( "Hello World!");
-    else if( frames == 303)
-      g_gui_text_view->AddString( "Hello World!");
   }
   if( g_game_manage->GetGameState() == GS_END)
     return true;
@@ -36,7 +28,6 @@ bool RenderFunc()
 	pHge->Gfx_Clear( 0xFFFFFFFF);
   g_gui_manage->Render();
   g_gui_mouse->Render();
-
 	pHge->Gfx_EndScene();
 	return false;
 }
@@ -44,7 +35,6 @@ bool RenderFunc()
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
   //_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-
 	HGE* pHge = hgeCreate( HGE_VERSION);
   pHge->System_SetState( HGE_LOGFILE, "log.txt");
 	pHge->System_SetState( HGE_FRAMEFUNC, FrameFunc);
