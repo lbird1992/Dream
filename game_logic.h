@@ -43,6 +43,13 @@ public:
   inline void SetMapAim( const Coordinate aim) {
     map_coordinate_to_go_ = aim;
   }
+  inline uint64_t* MakeTime(const uint64_t time) {
+    time_ = new uint64_t(time);
+    return time_;
+  }
+  inline uint64_t GetTime() const {
+    return *time_;
+  }
 
   void Walk();//人物行走，此处只更改人物坐标，画面中心坐标在GUIMAP中实现
 
@@ -52,6 +59,7 @@ private:
   Coordinate map_coordinate_to_go_;//目标点坐标
   int player_direction_;
   MapData map_data_[kMaxMapCount];
+  uint64_t* time_;
 };
 
 extern GameLogic* g_game_logic;

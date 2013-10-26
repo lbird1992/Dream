@@ -25,6 +25,8 @@ public:
 private:
   GameState game_state_;
   GUIMap* gui_map_;
+  HANDLE time_thread_handle_;
+  unsigned time_thread_id_;
 };
 
 extern GameManage* g_game_manage;

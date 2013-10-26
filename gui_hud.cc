@@ -22,9 +22,12 @@ void GUIHud::Init() {
   char filename[256];
   sprintf( filename, "image\\head\\rightup\\%d.was", 2);//TODO: 增加人物结构体
   AddSon( new GUIButton( filename, Coordinate( 528, 3),this, ClickOnPlayerHead, 0, 0, 0));
+  font_ = new GfxFont( "宋体", 14);
 }
 
 void GUIHud::Render( const Coordinate position) {
+  if( is_draw_ == false)
+    return;
   g_resource_manage->GetTex( "image\\other\\back1.was").Render( Coordinate( 325, 420), 0, 0);
   g_resource_manage->GetTex( "image\\other\\playerhead.was").Render( Coordinate( 525, 0), 0, 0);
   g_resource_manage->GetTex( "image\\other\\back2.was").Render( Coordinate( 573, 0), 0, 0);//人物HP
@@ -32,7 +35,30 @@ void GUIHud::Render( const Coordinate position) {
   g_resource_manage->GetTex( "image\\other\\back2.was").Render( Coordinate( 573, 24), 0, 0);
   g_resource_manage->GetTex( "image\\other\\back2.was").Render( Coordinate( 573, 36), 0, 0);
 
+  int second = g_game_logic->GetTime()%1800;
+  if( second >= 600 && second <= 1500) {
+    int tmp_int = second - 600;
+    g_resource_manage->GetTex( "image\\other\\timeday.png").RenderEx( Coordinate(24,32), Coordinate( 
+                                                                                    static_cast<float>(tmp_int/900.0*360), 0), 
+                                                  70, 30, 0, 0);
+  }
+  else {
+    int tmp_int = second - 1500;
+    if( tmp_int < 0)
+      tmp_int += 1800;
+    g_resource_manage->GetTex( "image\\other\\timenight.png").RenderEx( Coordinate(24,32), Coordinate( 
+                                                                                     static_cast<float>(tmp_int/900.0*360), 0), 
+                                                  70, 30, 0, 0);
+  }
+  g_resource_manage->GetTex( "image\\other\\timeback.png").Render( Coordinate( 0, 0), 0, 0);
+  char filename[256];
+  sprintf( filename, "image\\other\\time\\%d.was", second/150+1);
+  g_resource_manage->GetTex( filename).Render( Coordinate( 0, 25), 0, 0);
+
   GUIDialog::Render( position);
+
+  font_->SetColor( 0xFFFFFFFF);
+  font_->Print( 25, 65, "X:%.0f Y:%.0f", g_game_logic->GetPlayerCoordinate().GetX(), g_game_logic->GetPlayerCoordinate().GetY());
 }
 
 void GUIHud::ClickOnAttack() {}

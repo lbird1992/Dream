@@ -2,6 +2,7 @@
 #define _DREAM_GUIHUD_
 
 #include "gui_dialog.h"
+#include "GfxFont.h"
 
 class GUIHud : public GUIDialog {
 public:
@@ -24,6 +25,7 @@ public:
   static void ClickOnSystem();
   static void ClickOnPlayerHead();
 protected:
+  GfxFont* font_;
 };
 
 #endif
