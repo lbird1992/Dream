@@ -35,17 +35,14 @@ void GameLogic::Walk() {
     x_speed *= -1;
   if( y_length < 0)
     y_speed *= -1;
-  if( g_game_manage->GetMap()->GetCell( 
-                          map_coordinate_ + Coordinate(static_cast<float>(x_speed), 
-                                                      static_cast<float>(y_speed))) == 1)
+  Coordinate cell_coordinate = map_coordinate_ + Coordinate( static_cast<float>(x_speed), static_cast<float>(y_speed));
+  if( g_game_manage->GetMap()->GetCell( cell_coordinate) == 1)
   {
     map_coordinate_to_go_ = map_coordinate_;
     g_game_manage->GetMap()->GetPlayerGUI()->EndAnimation();
     return;
   }
-  else if( g_game_manage->GetMap()->GetCell( 
-                                    map_coordinate_ + Coordinate(static_cast<float>(x_speed),
-                                                                static_cast<float>(y_speed))) == 2) {
+  else if( g_game_manage->GetMap()->GetCell( cell_coordinate) == 2) {
     int x = static_cast<int>(map_coordinate_.GetX() + x_speed);
     int y = static_cast<int>(map_coordinate_.GetY() + y_speed);
     std::list<TransformData> transform_data = g_game_manage->GetMap()->GetTransformData();
@@ -60,8 +57,7 @@ void GameLogic::Walk() {
           nearest_transform = *iter;
         }
       }
-      map_coordinate_ = Coordinate( static_cast<float>(nearest_transform.dst_x), 
-                                    static_cast<float>(nearest_transform.dst_y));
+      map_coordinate_ = Coordinate( static_cast<float>(nearest_transform.dst_x), static_cast<float>(nearest_transform.dst_y));
       map_id_ = nearest_transform.dst_map_id;
       g_game_manage->GetMap()->ResetMapID( map_id_, map_coordinate_);
       map_coordinate_to_go_ = map_coordinate_;
@@ -144,9 +140,6 @@ int Player::NewPlayer(int ID,char* name,int image){
 }
 
 void Player::ChangePoint(int playerID, int tizhi, int moli, int liliang, int naili, int minjie){
- /* mpHeroLock.Lock();
-	Hero hero = mpHero[ playerID];
-	mpHeroLock.Unlock();*/
   Player hero = *this;
 	if( tizhi + moli + liliang + naili + minjie > hero.qianli_)
 		return;
@@ -213,11 +206,9 @@ void Player::LoadPlayer(FILE* fc) {
     fread( &temp.huoli2_, sizeof(temp.huoli2_), 1, fc);
     fread( &temp.tili_, sizeof(temp.tili_), 1, fc);
     fread( &temp.tili2_, sizeof(temp.tili2_), 1, fc);
-
     fread( &temp.mingzhong_, sizeof(temp.mingzhong_), 1, fc);
     fread( &temp.shanghai_, sizeof(temp.shanghai_), 1, fc);
     fread( &temp.fangyu_, sizeof(temp.fangyu_), 1, fc);
-
     fread( &temp.sudu_, sizeof(temp.sudu_), 1, fc);
     fread( &temp.duobi_, sizeof(temp.duobi_), 1, fc);
     fread( &temp.lingli_, sizeof(temp.lingli_), 1, fc);
@@ -232,7 +223,6 @@ void Player::LoadPlayer(FILE* fc) {
   fclose(fc);
   *this = temp;
 }
-
 
 void Player::Save(FILE* fa) const{
   Player temp = *this;
@@ -256,11 +246,9 @@ void Player::Save(FILE* fa) const{
     fwrite( &temp.huoli2_, sizeof(temp.huoli2_), 1, fa);
     fwrite( &temp.tili_, sizeof(temp.tili_), 1, fa);
     fwrite( &temp.tili2_, sizeof(temp.tili2_), 1, fa);
-
     fwrite( &temp.mingzhong_, sizeof(temp.mingzhong_), 1, fa);
     fwrite( &temp.shanghai_, sizeof(temp.shanghai_), 1, fa);
     fwrite( &temp.fangyu_, sizeof(temp.fangyu_), 1, fa);
-
     fwrite( &temp.sudu_, sizeof(temp.sudu_), 1, fa);
     fwrite( &temp.duobi_, sizeof(temp.duobi_), 1, fa);
     fwrite( &temp.lingli_, sizeof(temp.lingli_), 1, fa);
@@ -274,6 +262,3 @@ void Player::Save(FILE* fa) const{
   }
   fclose(fa);
 }
-
-
-
