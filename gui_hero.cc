@@ -1,5 +1,8 @@
-#include "gui_hero.h"
 
+#include "GfxFont.h"
+#include <atlbase.h>
+#include <stdio.h>
+#include "gui_hero.h"
 GUIHero::GUIHero( const std::string directory_path, const Coordinate position, const GUI* father) :
             GUIAnimation( (directory_path + "\\1.was").c_str(), position, father, LOOP) {
   directory_path_ = directory_path;
@@ -53,4 +56,18 @@ void GUIHero::Render( const Coordinate position) {
     frame_fill_ = frame_fill_second_;
     texture_ = texture_second_;
   }
+
+
+
+   Coordinate position_to_draw = position + coordinate_;
+   SIZE tsize = name_font_->GetTextSize(player_->name);//获取文本的尺寸
+   int tw = tsize.cx;
+   int tl = tsize.cy;
+   int th = texture_.GetHeight(frame_ ,direction_);//获取纹理的高
+   
+   float tx = position_to_draw.GetX() - static_cast<float>(tw/2);
+   float ty = position_to_draw.GetY() + static_cast<float>(th/2) + static_cast<float>(tl/2);
+   position_to_draw.SetX(tx);
+   position_to_draw.SetY(ty);
+
 }

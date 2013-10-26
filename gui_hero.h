@@ -2,6 +2,8 @@
 #define _DREAM_GUIHERO_
 
 #include "gui_animation.h"
+#include "game_logic.h"
+#include "GfxFont.h"
 
 class GUIHero : public GUIAnimation {
 public:
@@ -18,6 +20,10 @@ protected:
   Texture texture_second_;//纹理备份——仅放置站立动作
   int frame_second_;
   float frame_fill_second_;
+  Player* player_; 
+public:
+  static GfxFont* name_font_;
 };
 
+GfxFont* GUIHero::name_font_ = new GfxFont("宋体",16,1,0,1);
 #endif
