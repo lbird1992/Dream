@@ -14,6 +14,10 @@ public:
 
   virtual void Render( const Coordinate position);
 
+  inline void SetPlayer( const Player* player) {
+    player_ = const_cast<Player*>(player);
+  }
+
 protected:
   int action_;
   std::string directory_path_;
@@ -25,5 +29,5 @@ public:
   static GfxFont* name_font_;
 };
 
-GfxFont* GUIHero::name_font_ = new GfxFont("ËÎÌו",16,1,0,1);
+
 #endif

@@ -197,22 +197,6 @@ void Texture::LoadWasFile( const char* filename) {
   fclose(fp);
 }
 
-int Texture::GetKeyPointX( const int frame, const int direction) const {
-  if( frame >= frame_count_)
-    return 0;
-  if( direction >= direction_count_)
-    return 0;
-  return key_point_x_[frame][direction];
-}
-
-int Texture::GetKeyPointY( const int frame, const int direction) const {
-  if( frame >= frame_count_)
-    return 0;
-  if( direction >= direction_count_)
-    return 0;
-  return key_point_y_[frame][direction];
-}
-
 void Texture::Render( const Coordinate position, const int frame, const int direction) {
   HGE* hge = hgeCreate( HGE_VERSION);
   if( frame >= frame_count_) {

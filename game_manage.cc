@@ -24,6 +24,7 @@ void GameManage::SetPlay() {
 
   g_game_logic->LoadMapIni();
   g_game_logic->SetMapID( 1);
+  g_game_logic->GetPlayer()->NewPlayer( 1, "²âÊÔÈËÎï", 2);
   g_game_logic->SetPlayerCoordinate( Coordinate(11, 274));
   g_game_logic->SetMapAim( Coordinate(11,274));
   g_game_logic->SetPlayerDirection( 1);
@@ -32,6 +33,7 @@ void GameManage::SetPlay() {
   gui_map_ = new GUIMap();
   gui_map_->ResetMapID( 1, Coordinate( 11, 274));
   GUIHero* player = new GUIHero( "image\\hero\\2", Coordinate(0, 0), gui_map_);
+  player->SetPlayer( g_game_logic->GetPlayer());
   gui_map_->SetPlayerGUI( player);
   gui_map_->SetOnDraw();
   GUIHud* gui_hud = new GUIHud();

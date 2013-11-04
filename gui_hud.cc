@@ -59,6 +59,11 @@ void GUIHud::Render( const Coordinate position) {
 
   font_->SetColor( 0xFFFFFFFF);
   font_->Print( 25, 65, "X:%.0f Y:%.0f", g_game_logic->GetPlayerCoordinate().GetX(), g_game_logic->GetPlayerCoordinate().GetY());
+  Coordinate map_name_position = Coordinate( 40, 17);
+  //TODO:加入字符中间显示
+  
+  int map_id = g_game_logic->GetMapID();
+  font_->Print( 35, 17, "%s", g_game_logic->GetMapData( map_id).map_name);
 }
 
 void GUIHud::ClickOnAttack() {}

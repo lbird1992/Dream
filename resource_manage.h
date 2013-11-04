@@ -38,8 +38,20 @@ public:
   inline int16_t GetDirectionCount() const{
     return direction_count_;
   }
-  inline int GetKeyPointX( const int frame, const int direction) const;
-  inline int GetKeyPointY( const int frame, const int direction) const;
+  inline int GetKeyPointX( const int frame, const int direction) const {
+    if( frame >= frame_count_)
+      return 0;
+    if( direction >= direction_count_)
+      return 0;
+    return key_point_x_[frame][direction];
+  }
+  inline int GetKeyPointY( const int frame, const int direction) const {
+    if( frame >= frame_count_)
+      return 0;
+    if( direction >= direction_count_)
+      return 0;
+    return key_point_y_[frame][direction];
+  }
   inline int GetWidth( const int frame, const int direction) const {
     HGE* hge = hgeCreate( HGE_VERSION);
     return hge->Texture_GetWidth( tex_[frame][direction]);

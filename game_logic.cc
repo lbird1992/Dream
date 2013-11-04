@@ -87,9 +87,10 @@ void GameLogic::Walk() {
 
 int Player::NewPlayer(int ID,char* name,int image){
 	Player hero;
+  hero.hero_type_ = HT_PLAYER;
   memset( &hero, 0, sizeof(hero));
 	hero.ID_ = ID;
-	strcpy( hero.name, name);
+	strcpy( hero.name_, name);
 	hero.image_ = image;
 
 	if( image_/4 == 0)
@@ -186,11 +187,12 @@ void Player::ChangePoint(int playerID, int tizhi, int moli, int liliang, int nai
 
 void Player::LoadPlayer(FILE* fc) {
   Player temp;
+  temp.hero_type_ = HT_PLAYER;
   if( fc != NULL) {
     fread( &temp.ID_, sizeof(ID_), 1, fc);
     fread( &temp.image_, sizeof(temp.image_), 1, fc);
     fread( &temp.weaponImage_, sizeof(temp.weaponImage_), 1, fc);
-    fread(temp.name,sizeof(char), 20, fc);
+    fread(temp.name_,sizeof(char), 20, fc);
     fread( &temp.renqi_, sizeof(temp.renqi_), 1, fc);
     fread( &temp.menpai_, sizeof(temp.menpai_), 1, fc);
     fread( &temp.menpaigongxian_, sizeof(temp.menpaigongxian_), 1, fc);
@@ -230,7 +232,7 @@ void Player::Save(FILE* fa) const{
     fwrite( &temp.ID_, sizeof(ID_), 1, fa);
     fwrite( &temp.image_, sizeof(temp.image_), 1, fa);
     fwrite( &temp.weaponImage_, sizeof(temp.weaponImage_), 1, fa);
-    fwrite(temp.name,sizeof(char), 20, fa);
+    fwrite(temp.name_,sizeof(char), 20, fa);
     fwrite( &temp.renqi_, sizeof(temp.renqi_), 1, fa);
     fwrite( &temp.menpai_, sizeof(temp.menpai_), 1, fa);
     fwrite( &temp.menpaigongxian_, sizeof(temp.menpaigongxian_), 1, fa);
